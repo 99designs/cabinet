@@ -21,7 +21,7 @@ class ArrayFileStoreTest
         $this->assertTrue(is_resource($filehandle));
 
         // write some stuff
-        fwrite($filehandle,"this is a test");
+        fwrite($filehandle, "this is a test");
         $this->instance->close($filehandle);
 
         $this->assertTrue($this->instance->fileExists('testfile'));
@@ -30,19 +30,19 @@ class ArrayFileStoreTest
     public function testFileContentsHelpers()
     {
         $this->assertFalse($this->instance->fileExists('testfile'));
-        $this->instance->setFileContents('testfile','mmmmm plastic');
+        $this->instance->setFileContents('testfile', 'mmmmm plastic');
         $this->assertTrue($this->instance->fileExists('testfile'));
-        $this->assertEquals('mmmmm plastic',$this->instance->getFileContents('testfile'));
+        $this->assertEquals('mmmmm plastic', $this->instance->getFileContents('testfile'));
     }
 
     public function testPuttingTwiceWorksOk()
     {
         $this->assertFalse($this->instance->fileExists('testfile'));
-        $this->instance->setFileContents('testfile','mmmmm plastic');
-        $this->instance->setFileContents('testfile','frogs are green');
+        $this->instance->setFileContents('testfile', 'mmmmm plastic');
+        $this->instance->setFileContents('testfile', 'frogs are green');
         $this->assertTrue($this->instance->fileExists('testfile'));
 
-        $this->assertEquals('frogs are green',$this->instance->getFileContents('testfile'));
+        $this->assertEquals('frogs are green', $this->instance->getFileContents('testfile'));
     }
 
     public function testGettingANonexistantFileDoesntWork()
@@ -54,7 +54,7 @@ class ArrayFileStoreTest
     public function testDeletingAFileWorks()
     {
         $this->assertFalse($this->instance->fileExists('testfile'));
-        $this->instance->setFileContents('testfile','mmmmm plastic');
+        $this->instance->setFileContents('testfile', 'mmmmm plastic');
         $this->assertTrue($this->instance->fileExists('testfile'));
 
         $this->instance->deleteFile('testfile');
@@ -66,7 +66,7 @@ class ArrayFileStoreTest
     public function testOpeningFileWorks()
     {
         $this->assertFalse($this->instance->fileExists('testfile'));
-        $this->instance->setFileContents('testfile','mmmmm plastic');
+        $this->instance->setFileContents('testfile', 'mmmmm plastic');
         $this->assertTrue($this->instance->fileExists('testfile'));
 
         $this->assertTrue(is_resource($this->instance->openFile('testfile')));

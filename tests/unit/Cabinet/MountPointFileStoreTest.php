@@ -28,7 +28,7 @@ class MountPointFileStoreTest
         $testfs
             ->shouldReceive('setFileContents')
             ->once()
-            ->with('blargh','meh');
+            ->with('blargh', 'meh');
 
         $anotherfs
             ->shouldReceive('setFileContents')
@@ -37,9 +37,9 @@ class MountPointFileStoreTest
         // test that the / prefix routes to our testfs object
         $fs = new MountPointFileStore();
         $fs->mount('/', $testfs);
-        $fs->mount('/another',$anotherfs);
+        $fs->mount('/another', $anotherfs);
 
-        $fs->setFileContents('/blargh','meh');
+        $fs->setFileContents('/blargh', 'meh');
     }
 
     public function testExceptionWhenNoMatchingMount()
@@ -50,10 +50,10 @@ class MountPointFileStoreTest
             ->never();
 
         $fs = new MountPointFileStore();
-        $fs->mount('/no/match',$testfs);
+        $fs->mount('/no/match', $testfs);
 
         $this->setExpectedException('\Cabinet\FileStoreException');
-        $fs->setFileContents('/blargh','meh');
+        $fs->setFileContents('/blargh', 'meh');
     }
 
     public function testLeadingSlashIsTrimmed()
@@ -62,13 +62,13 @@ class MountPointFileStoreTest
         $testfs
             ->shouldReceive('setFileContents')
             ->once()
-            ->with('meep','meh');
+            ->with('meep', 'meh');
 
         // test that the / prefix routes to our testfs object
         $fs = new MountPointFileStore();
         $fs->mount('/my/match', $testfs);
 
-        $fs->setFileContents('my/match/meep','meh');
+        $fs->setFileContents('my/match/meep', 'meh');
     }
 
     public function testLongestMatchIsPicked()
@@ -80,7 +80,7 @@ class MountPointFileStoreTest
         $testfs
             ->shouldReceive('setFileContents')
             ->once()
-            ->with('meep','meh');
+            ->with('meep', 'meh');
         $anotherfs
             ->shouldReceive('setFileContents')
             ->never();
@@ -91,9 +91,9 @@ class MountPointFileStoreTest
         // test that the / prefix routes to our testfs object
         $fs = new MountPointFileStore();
         $fs->mount('/my/match', $testfs);
-        $fs->mount('/my',$anotherfs);
+        $fs->mount('/my', $anotherfs);
         $fs->mount('/my/ma', $yetanotherfs);
 
-        $fs->setFileContents('/my/match/meep','meh');
+        $fs->setFileContents('/my/match/meep', 'meh');
     }
 }

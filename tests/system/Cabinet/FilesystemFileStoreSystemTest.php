@@ -8,7 +8,7 @@ class FilesystemFileStoreSystemTest
     public function setUp()
     {
         // create us a temporary directory
-        $this->tempdir = tempnam('/tmp',__CLASS__);
+        $this->tempdir = tempnam('/tmp', __CLASS__);
         unlink($this->tempdir);
         mkdir($this->tempdir);
 
@@ -30,7 +30,7 @@ class FilesystemFileStoreSystemTest
         $this->assertTrue(is_resource($filehandle));
 
         // write some stuff
-        fwrite($filehandle,"this is a test");
+        fwrite($filehandle, "this is a test");
         $this->instance->close($filehandle);
 
         $this->assertTrue($this->instance->fileExists('testfile'));
@@ -39,19 +39,19 @@ class FilesystemFileStoreSystemTest
     public function testFileContentsHelpers()
     {
         $this->assertFalse($this->instance->fileExists('testfile'));
-        $this->instance->setFileContents('testfile','mmmmm plastic');
+        $this->instance->setFileContents('testfile', 'mmmmm plastic');
         $this->assertTrue($this->instance->fileExists('testfile'));
-        $this->assertEquals('mmmmm plastic',$this->instance->getFileContents('testfile'));
+        $this->assertEquals('mmmmm plastic', $this->instance->getFileContents('testfile'));
     }
 
     public function testPuttingTwiceWorksOk()
     {
         $this->assertFalse($this->instance->fileExists('testfile'));
-        $this->instance->setFileContents('testfile','mmmmm plastic');
-        $this->instance->setFileContents('testfile','frogs are green');
+        $this->instance->setFileContents('testfile', 'mmmmm plastic');
+        $this->instance->setFileContents('testfile', 'frogs are green');
         $this->assertTrue($this->instance->fileExists('testfile'));
 
-        $this->assertEquals('frogs are green',$this->instance->getFileContents('testfile'));
+        $this->assertEquals('frogs are green', $this->instance->getFileContents('testfile'));
     }
 
     public function testGettingANonexistantFileDoesntWork()
@@ -63,7 +63,7 @@ class FilesystemFileStoreSystemTest
     public function testDeletingAFileWorks()
     {
         $this->assertFalse($this->instance->fileExists('testfile'));
-        $this->instance->setFileContents('testfile','mmmmm plastic');
+        $this->instance->setFileContents('testfile', 'mmmmm plastic');
         $this->assertTrue($this->instance->fileExists('testfile'));
 
         $this->instance->deleteFile('testfile');
@@ -73,7 +73,7 @@ class FilesystemFileStoreSystemTest
     public function testOpeningFileWorks()
     {
         $this->assertFalse($this->instance->fileExists('testfile'));
-        $this->instance->setFileContents('testfile','mmmmm plastic');
+        $this->instance->setFileContents('testfile', 'mmmmm plastic');
         $this->assertTrue($this->instance->fileExists('testfile'));
 
         $this->assertTrue(is_resource($this->instance->openFile('testfile')));
@@ -88,14 +88,14 @@ class FilesystemFileStoreSystemTest
 
         $filestore = new FilesystemFileStore($this->tempdir);
         $filestore->setFileContents('foo', $fh);
-        $this->assertEquals($filestore->getFileContents('foo'),'a resource in time saves nine');
+        $this->assertEquals($filestore->getFileContents('foo'), 'a resource in time saves nine');
     }
 
     public function testKeysWithSlashesWork()
     {
         $this->assertFalse($this->instance->fileExists('mydir/testfile'));
-        $this->instance->setFileContents('mydir/testfile','mmmmm plastic');
+        $this->instance->setFileContents('mydir/testfile', 'mmmmm plastic');
         $this->assertTrue($this->instance->fileExists('mydir/testfile'));
-        $this->assertEquals('mmmmm plastic',$this->instance->getFileContents('mydir/testfile'));
+        $this->assertEquals('mmmmm plastic', $this->instance->getFileContents('mydir/testfile'));
     }
 }
