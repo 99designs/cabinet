@@ -48,7 +48,7 @@ class ArrayFileStoreTest
     public function testGettingANonexistantFileDoesntWork()
     {
         $this->setExpectedException('\Cabinet\FileStoreException');
-        $this->assertTrue($this->instance->getFileContents('testfile'));
+        $this->instance->getFileContents('testfile');
     }
 
     public function testDeletingAFileWorks()
