@@ -8,6 +8,10 @@ namespace Cabinet;
 class MountPointFileStoreTest
     extends \PHPUnit_Framework_TestCase
 {
+    public function tearDown() {
+        \Mockery::close();
+    }
+
     /**
      * Creates and registers a mock filestore with the factory
      */
