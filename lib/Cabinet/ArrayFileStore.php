@@ -7,77 +7,74 @@ namespace Cabinet;
  */
 class ArrayFileStore extends AbstractFileStore
 {
-	private $_array;
+    private $_array;
 
-	/**
-	 * Constructor
-	 */
-	function __construct(array $array=array())
-	{
-		$this->_array = $array;
-	}
+    /**
+     * Constructor
+     */
+    public function __construct(array $array=array())
+    {
+        $this->_array = $array;
+    }
 
-	/* (non-php)
-	 * @see Cabinet\FileStore::getFileContents()
-	 */
-	function getFileContents($filekey)
-	{
-		if(!$this->fileExists($filekey))
-		{
-			throw new FileStoreException(
-				"No file for key '$filekey' exists");
-		}
+    /* (non-php)
+     * @see Cabinet\FileStore::getFileContents()
+     */
+    public function getFileContents($filekey)
+    {
+        if (!$this->fileExists($filekey)) {
+            throw new FileStoreException(
+                "No file for key '$filekey' exists");
+        }
 
-		return $this->_array[$filekey];
-	}
+        return $this->_array[$filekey];
+    }
 
-	/* (non-php)
-	 * @see Cabinet\FileStore::setFileContents()
-	 */
-	function setFileContents($filekey,$data)
-	{
-		$this->_array[$filekey] = $this->_readStreamOrString($data);
-		return true;
-	}
+    /* (non-php)
+     * @see Cabinet\FileStore::setFileContents()
+     */
+    public function setFileContents($filekey,$data)
+    {
+        $this->_array[$filekey] = $this->_readStreamOrString($data);
 
-	/* (non-php)
-	 * @see Cabinet\FileStore::deleteFile()
-	 */
-	function deleteFile($filekey)
-	{
-		if(!$this->fileExists($filekey))
-		{
-			throw new FileStoreException(
-				"No file for key '$filekey' exists");
-		}
+        return true;
+    }
 
-		unset($this->_array[$filekey]);
-	}
+    /* (non-php)
+     * @see Cabinet\FileStore::deleteFile()
+     */
+    public function deleteFile($filekey)
+    {
+        if (!$this->fileExists($filekey)) {
+            throw new FileStoreException(
+                "No file for key '$filekey' exists");
+        }
 
-	/* (non-php)
-	 * @see Cabinet\FileStore::fileExists()
-	 */
-	function fileExists($filekey)
-	{
-		return isset($this->_array[$filekey]);
-	}
+        unset($this->_array[$filekey]);
+    }
 
-	/* (non-php)
-	 * @see Cabinet\FileStore::fileExists()
-	 */
-	function getFileMetadata($filekey)
-	{
-		$stats = false;
-		if($this->fileExists($filekey))
-		{
-			$stats = array(
-				'size'=>strlen($this->_array[$filekey]),
-				'mtime'=>0,
-				'atime'=>time(),
-			);
-		}
+    /* (non-php)
+     * @see Cabinet\FileStore::fileExists()
+     */
+    public function fileExists($filekey)
+    {
+        return isset($this->_array[$filekey]);
+    }
 
-		return $stats;
-	}
+    /* (non-php)
+     * @see Cabinet\FileStore::fileExists()
+     */
+    public function getFileMetadata($filekey)
+    {
+        $stats = false;
+        if ($this->fileExists($filekey)) {
+            $stats = array(
+                'size'=>strlen($this->_array[$filekey]),
+                'mtime'=>0,
+                'atime'=>time(),
+            );
+        }
+
+        return $stats;
+    }
 }
-

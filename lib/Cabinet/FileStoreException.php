@@ -8,4 +8,3 @@ namespace Cabinet;
 class FileStoreException extends \Exception
 {
 }
-
