@@ -6,10 +6,10 @@ namespace Cabinet;
  * An abstract filestore that provides the bulk of a file store base on the
  * php://temp stream available in PHP 5.1.0.
  *
- * Writing extensions of this class is easy, simply write implementations for
+ * Writing extensions of this class is easy; simply write implementations for
  * getFileContents, setFileContents, fileExists, delete and getFileMetadata.
-
- * @author Lachlan Donald <lachlan@sitepoint.com>
+ *
+ * @author Lachlan Donald <lachlan@99designs.com>
  */
 abstract class AbstractFileStore implements FileStore
 {
@@ -19,7 +19,7 @@ abstract class AbstractFileStore implements FileStore
     /**
      * Creates a temporary file pointer that can optionally be written to the
      * backend when close() is called on it.
-
+     *
      * @param $filekey string the key of the file
      */
     protected function _createTempFile($filekey, $writeonclose=true)
@@ -29,7 +29,7 @@ abstract class AbstractFileStore implements FileStore
         }
 
         // optionally track the file for later closing
-        if($writeonclose) $this->_addOpenFile($filekey, $fp);
+        if ($writeonclose) $this->_addOpenFile($filekey, $fp);
 
         return $fp;
     }

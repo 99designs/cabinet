@@ -3,8 +3,8 @@
 namespace Cabinet;
 
 /**
- * A decorator for a filestore that delegates writes to a filestore,
- * defaults to a null filestore.
+ * A decorator for a filestore that delegates writes to a secondary filestore,
+ * defaulting to a null filestore.
  */
 class ReadOnlyFileStore implements FileStore
 {
@@ -14,16 +14,10 @@ class ReadOnlyFileStore implements FileStore
     /**
      * Constructor
      */
-    public function __construct(FileStore $readDelegate,
-        FileStore $writeDelegate=null)
+    public function __construct($readDelegate, $writeDelegate=null)
     {
         $this->_reader = $readDelegate;
-
-        if (is_null($writeDelegate)) {
-            $writeDelegate = new \Cabinet\NullFileStore();
-        }
-
-        $this->_writer = $writeDelegate;
+        $this->_writer = $writeDelegate ?: new \Cabinet\NullFileStore();
     }
 
     // ----------------------------------------------------
@@ -68,9 +62,9 @@ class ReadOnlyFileStore implements FileStore
     public function downloadFile($filekey,$filepointer)
     {
         if ($this->_writer->fileExists($filekey)) {
-            return $this->_writer->downloadFile($filekey,$filepointer);
+            return $this->_writer->downloadFile($filekey, $filepointer);
         } else {
-            return $this->_reader->downloadFile($filekey,$filepointer);
+            return $this->_reader->downloadFile($filekey, $filepointer);
         }
     }
 
@@ -88,7 +82,7 @@ class ReadOnlyFileStore implements FileStore
     /* (non-phpdoc)
      * @see Cabinet\FileStore::openFile
     */
-    public function openFile($filekey,$readOnly=false)
+    public function openFile($filekey, $readOnly=false)
     {
         // if readonly, and doesn't exist locally, defer to reader
         if ($readOnly  && !$this->_writer->fileExists($filekey)) {
@@ -102,15 +96,15 @@ class ReadOnlyFileStore implements FileStore
         }
 
         // otherwise just use the local writer
-        return $this->_writer->openFile($filekey,$readOnly);
+        return $this->_writer->openFile($filekey, $readOnly);
     }
 
     /* (non-phpdoc)
      * @see Cabinet\FileStore::getFileContents
     */
-    public function setFileContents($filekey,$data)
+    public function setFileContents($filekey, $data)
     {
-        return $this->_writer->setFileContents($filekey,$data);
+        return $this->_writer->setFileContents($filekey, $data);
     }
 
     /* (non-phpdoc)
@@ -119,9 +113,8 @@ class ReadOnlyFileStore implements FileStore
     public function deleteFile($filekey)
     {
         // delete won't be permenant, as it will be cached again on the next read
-        if(!$this->_writer->fileExists($filekey)
-            && $this->_reader->fileExists($filekey))
-        {
+        if (!$this->_writer->fileExists($filekey)
+            && $this->_reader->fileExists($filekey)) {
             return;
         }
 

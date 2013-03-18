@@ -12,15 +12,15 @@ class NullFileStore implements FileStore
      */
     public function newFile($filekey)
     {
-        return fopen('php://temp/maxmemory:512000','r+');
+        return fopen('php://temp/maxmemory:512000', 'r+');
     }
 
     /* (non-phpdoc)
      * @see Cabinet\FileStore::openFile
      */
-    public function openFile($filekey,$readOnly=false)
+    public function openFile($filekey, $readOnly=false)
     {
-        return fopen('php://temp/maxmemory:512000','rb+');
+        return fopen('php://temp/maxmemory:512000', 'rb+');
     }
 
     /* (non-phpdoc)
@@ -28,13 +28,13 @@ class NullFileStore implements FileStore
     */
     public function getFileContents($filekey)
     {
-        return NULL;
+        return null;
     }
 
     /* (non-phpdoc)
      * @see Cabinet\FileStore::getFileContents
     */
-    public function setFileContents($filekey,$data)
+    public function setFileContents($filekey, $data)
     {
         return true;
     }
@@ -73,7 +73,7 @@ class NullFileStore implements FileStore
     /* (non-phpdoc)
      * @see Cabinet\FileStore::getFileMetadata
      */
-    public function downloadFile($filekey,$filepointer)
+    public function downloadFile($filekey, $filepointer)
     {
     }
 }

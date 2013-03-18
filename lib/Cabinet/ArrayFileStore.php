@@ -12,7 +12,7 @@ class ArrayFileStore extends AbstractFileStore
     /**
      * Constructor
      */
-    public function __construct(array $array=array())
+    public function __construct($array=array())
     {
         $this->_array = $array;
     }
@@ -23,8 +23,7 @@ class ArrayFileStore extends AbstractFileStore
     public function getFileContents($filekey)
     {
         if (!$this->fileExists($filekey)) {
-            throw new FileStoreException(
-                "No file for key '$filekey' exists");
+            throw new FileStoreException("No file for key '$filekey' exists");
         }
 
         return $this->_array[$filekey];
@@ -46,8 +45,7 @@ class ArrayFileStore extends AbstractFileStore
     public function deleteFile($filekey)
     {
         if (!$this->fileExists($filekey)) {
-            throw new FileStoreException(
-                "No file for key '$filekey' exists");
+            throw new FileStoreException("No file for key '$filekey' exists");
         }
 
         unset($this->_array[$filekey]);
@@ -69,9 +67,9 @@ class ArrayFileStore extends AbstractFileStore
         $stats = false;
         if ($this->fileExists($filekey)) {
             $stats = array(
-                'size'=>strlen($this->_array[$filekey]),
-                'mtime'=>0,
-                'atime'=>time(),
+                'size' => strlen($this->_array[$filekey]),
+                'mtime' => 0,
+                'atime' => time(),
             );
         }
 

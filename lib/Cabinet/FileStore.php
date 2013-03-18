@@ -12,8 +12,8 @@ interface FileStore
      * when {@link Cabinet\FileStore::close} is called with the pointer. If the
      * file exists, it will be truncated and overwritten.
      *
-     * @param $filekey string the path to the file in the filestore
-     * @return Resource                   file pointer for the new file, file opened in write mode
+     * @param string $filekey the path to the file in the filestore
+     * @return Resource file pointer for the new file, file opened in write mode
      * @throws Cabinet\FileStoreException on error
      */
     public function newFile($filekey);
@@ -25,9 +25,9 @@ interface FileStore
      * already exist with {@link newFile}. The file pointer will be returned at
      * the start of the stream.
      *
-     * @param $filekey string the path to the file in the filestore
-     * @param $readOnly boolean whether to open the file in a read-only mode
-     * @return Resource                   file pointer for the opened file, at the start
+     * @param string $filekey the path to the file in the filestore
+     * @param boolean $readOnly whether to open the file in a read-only mode
+     * @return Resource file pointer for the opened file, at the start
      * @throws Cabinet\FileStoreException on error
      */
     public function openFile($filekey,$readOnly=false);
@@ -35,9 +35,9 @@ interface FileStore
     /**
      * Gets the contents of a file as a string
      *
-     * @param $filekey string the path to the file in the filestore
+     * @param string $filekey the path to the file in the filestore
      * @throws Cabinet\FileStoreException If file with that filekey doesn't exist
-     * @return string                     the contents of a file
+     * @return string the contents of a file
      */
     public function getFileContents($filekey);
 
@@ -45,17 +45,17 @@ interface FileStore
      * Sets the contents of a file directly, regardless of whether it currently
      * exists. Data can be either a string or a stream resource.
      *
-     * @param $filekey string the path to the file in the filestore
+     * @param string $filekey the path to the file in the filestore
      * @throws Cabinet\FileStoreException If the file cannot be written
-     * @return boolean                    success
+     * @return boolean success
      */
     public function setFileContents($filekey,$data);
 
     /**
      * Deletes a file by the key
      *
-     * @param $filekey string the path to the file in the filestore
-     * @return boolean                    Was file deleted successfully?
+     * @param string $filekey the path to the file in the filestore
+     * @return boolean Was file deleted successfully?
      * @throws Cabinet\FileStoreException If file with that filekey does not exist
      */
     public function deleteFile($filekey);

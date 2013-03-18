@@ -8,24 +8,24 @@ namespace Cabinet;
 class FilesystemFileStore extends AbstractFileStore
 {
     /**
-     * @var	string	path to store files
+     * @var string path to store files
      */
     protected $_filepath;
 
     /**
      * The number of characters used in the path stubs
      */
-    const STUB_KEY_LENGTH=2;
+    const STUB_KEY_LENGTH = 2;
 
     /**
-     * @param	string	path to store files
+     * @param string $path path to store files
      */
     public function __construct($path)
     {
         $this->_filepath = rtrim($path,'/').'/';
 
         // ensure filestore path exists
-        if(!is_dir($path)) FileHelper::createDirectory($path);
+        if (!is_dir($path)) FileHelper::createDirectory($path);
     }
 
     /**
@@ -33,11 +33,11 @@ class FilesystemFileStore extends AbstractFileStore
      */
     protected function _getRealFilePath($filekey, $createDir=true)
     {
-        $filekey = substr(sha1($filekey),0,32);
+        $filekey = substr(sha1($filekey), 0, 32);
         $path = sprintf('%s/%s/',
             rtrim($this->_filepath,'/'),
             substr($filekey,0,self::STUB_KEY_LENGTH)
-            );
+        );
 
         // ensure directory path exists
         if ($createDir && !is_dir($path)) {
@@ -55,7 +55,7 @@ class FilesystemFileStore extends AbstractFileStore
         return $this->_addOpenFile(
             $filekey,
             fopen($this->_getRealFilePath($filekey), 'w+')
-            );
+        );
     }
 
     /* (non-phpdoc)
@@ -81,8 +81,7 @@ class FilesystemFileStore extends AbstractFileStore
     public function getFileContents($filekey)
     {
         if (!$this->fileExists($filekey)) {
-            throw new FileStoreException(
-                "No file for key '$filekey' exists");
+            throw new FileStoreException("No file for key '$filekey' exists");
         }
 
         return file_get_contents($this->_getRealFilePath($filekey));
@@ -91,7 +90,7 @@ class FilesystemFileStore extends AbstractFileStore
     /* (non-phpdoc)
      * @see Cabinet\FileStore::getFileContents
      */
-    public function setFileContents($filekey,$data)
+    public function setFileContents($filekey, $data)
     {
         $filepath = $this->_getRealFilePath($filekey);
         $tmpfilepath = $filepath.'.tmp-'.uniqid();
@@ -101,7 +100,8 @@ class FilesystemFileStore extends AbstractFileStore
             $fp = fopen($tmpfilepath, 'w+');
             if (!$fp) {
                 throw new FileStoreException(
-                    "Failed to open '" . $tmpfilepath . "' for writing\nError details:\n" . var_export(error_get_last(), TRUE));
+                    "Failed to open '$tmpfilepath' for writing\n" .
+                    "Error details:\n" . var_export(error_get_last(), true));
             }
 
             while (!feof($data)) {
@@ -130,13 +130,11 @@ class FilesystemFileStore extends AbstractFileStore
     public function deleteFile($filekey)
     {
         if (!$this->fileExists($filekey)) {
-            throw new FileStoreException(
-                "No file for key '$filekey' exists");
+            throw new FileStoreException("No file for key '$filekey' exists");
         }
 
         if (!unlink($this->_getRealFilePath($filekey))) {
-            throw new FileStoreException(
-                "File for key '$filekey' couldn't be deleted");
+            throw new FileStoreException("File for key '$filekey' couldn't be deleted");
         }
 
         return true;
@@ -160,9 +158,9 @@ class FilesystemFileStore extends AbstractFileStore
 
         if ($this->fileExists($filekey)) {
             $stats = array(
-                'size'=>filesize($path),
-                'mtime'=>filemtime($path),
-                'atime'=>fileatime($path),
+                'size' => filesize($path),
+                'mtime' => filemtime($path),
+                'atime' => fileatime($path),
             );
         }
 

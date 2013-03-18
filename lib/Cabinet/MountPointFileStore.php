@@ -6,7 +6,7 @@ namespace Cabinet;
  * A filestore mediator that allows a filestore to be composed of other filestores
  * bound to certain points in the virtual file system.
  *
- * @author Lachlan Donald <lachlan@sitepoint.com>
+ * @author Lachlan Donald <lachlan@99designs.com>
  */
 class MountPointFileStore implements FileStore
 {
@@ -17,8 +17,9 @@ class MountPointFileStore implements FileStore
      */
     public function mount($path, $filestore)
     {
-        $pattern = ($path == '/') ?
-            '#^(/)(.+)$#' : '#^('.preg_quote($path,'#').')(/.+)?$#';
+        $pattern = ($path == '/')
+            ? '#^(/)(.+)$#'
+            : '#^('.preg_quote($path, '#').')(/.+)?$#';
 
         $this->_mounts[$pattern] = $filestore;
     }
@@ -26,18 +27,18 @@ class MountPointFileStore implements FileStore
     /**
      * Dynamically invoke a method on the matching filestore
      */
-    private function _invokeMatchingFilestore($filekey,$method,$params)
+    private function _invokeMatchingFilestore($filekey, $method, $params)
     {
-        if($filekey[0] != '/') $filekey = '/'.$filekey;
+        if ($filekey[0] != '/') $filekey = '/'.$filekey;
 
         $bestMatch = false;
         $bestPattern = false;
         $bestSlashCount = 0;
 
         // find the best match for a mount point
-        foreach ($this->_mounts as $pattern=>$fileStore) {
+        foreach ($this->_mounts as $pattern => $fileStore) {
             if (preg_match($pattern, $filekey, $matches)) {
-                $slashCount = substr_count($matches[1],'/');
+                $slashCount = substr_count($matches[1], '/');
 
                 // only store the match if it's longer than the previous match
                 if ($slashCount >= $bestSlashCount) {
@@ -49,15 +50,14 @@ class MountPointFileStore implements FileStore
         }
 
         if (!$bestMatch) {
-            throw new FileStoreException(
-                "No filestore mounted for $filekey");
+            throw new FileStoreException("No filestore mounted for $filekey");
         }
 
         // strip the mount point from the key sent to the filestore
-        $params[0] = ltrim(preg_replace($bestPattern,'\\2',$filekey),'/');
+        $params[0] = ltrim(preg_replace($bestPattern, '\\2', $filekey), '/');
 
         // route the method call to the filestore
-        return call_user_func_array(array($bestMatch,$method),$params);
+        return call_user_func_array(array($bestMatch, $method), $params);
     }
 
     /* (non-phpdoc)
@@ -66,7 +66,7 @@ class MountPointFileStore implements FileStore
     public function newFile($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__,array($filekey));
+            __FUNCTION__, array($filekey));
     }
 
     /* (non-phpdoc)
@@ -75,7 +75,7 @@ class MountPointFileStore implements FileStore
     public function getFileMetadata($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__,array($filekey));
+            __FUNCTION__, array($filekey));
     }
 
     /* (non-phpdoc)
@@ -84,16 +84,16 @@ class MountPointFileStore implements FileStore
     public function getFileContents($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__,array($filekey));
+            __FUNCTION__, array($filekey));
     }
 
     /* (non-phpdoc)
      * @see Cabinet\FileStore::getFileContents
     */
-    public function setFileContents($filekey,$data)
+    public function setFileContents($filekey, $data)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__,array($filekey,$data));
+            __FUNCTION__, array($filekey,$data));
     }
 
     /* (non-phpdoc)
@@ -102,16 +102,16 @@ class MountPointFileStore implements FileStore
     public function deleteFile($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__,array($filekey));
+            __FUNCTION__, array($filekey));
     }
 
     /* (non-phpdoc)
      * @see Cabinet\FileStore::openFile
      */
-    public function openFile($filekey,$readOnly=false)
+    public function openFile($filekey, $readOnly=false)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__,array($filekey,$readOnly));
+            __FUNCTION__, array($filekey, $readOnly));
     }
 
     /* (non-phpdoc)
@@ -120,7 +120,7 @@ class MountPointFileStore implements FileStore
     public function fileExists($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__,array($filekey));
+            __FUNCTION__, array($filekey));
     }
 
     /* (non-phpdoc)
@@ -129,7 +129,7 @@ class MountPointFileStore implements FileStore
     public function downloadFile($filekey, $filepointer)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__,array($filekey));
+            __FUNCTION__, array($filekey));
     }
 
     /* (non-phpdoc)
@@ -137,7 +137,7 @@ class MountPointFileStore implements FileStore
      */
     public function close($filepointer)
     {
-        foreach ($this->_mounts as $key=>$filestore) {
+        foreach ($this->_mounts as $key => $filestore) {
             $filestore->close($filepointer);
         }
     }

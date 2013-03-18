@@ -13,7 +13,7 @@ class FileHelper
      * @param  int    $flags   Flags sent to glob.
      * @return array  containing all pattern-matched files.
      */
-    public static function globr($dir, $pattern = '*', $flags = NULL)
+    public static function globr($dir, $pattern='*', $flags=null)
     {
         if (empty($dir) || !is_dir($dir)) {
             throw new \Exception("Unable to glob $dir, not a directory");
@@ -31,19 +31,19 @@ class FileHelper
     }
 
     /**
-     * Recursively delete a directory and it's contents. Use with caution!
+     * Recursively delete a directory and its contents. Use with caution!
      */
-    public static function deleteDirectory($dir,$later=false)
+    public static function deleteDirectory($dir, $later=false)
     {
         if (empty($dir) || !is_dir($dir)) {
             throw new \SpfException("Unable to delete $dir, not a directory");
         }
 
         if ($later) {
-            register_shutdown_function(array(__CLASS__, 'deleteDirectory'),$dir);
+            register_shutdown_function(array(__CLASS__, 'deleteDirectory'), $dir);
         } else {
-            self::walkDirectory($dir,array(__CLASS__,'_deleteCallback'), array($dir));
-            if(is_dir($dir)) rmdir($dir);
+            self::walkDirectory($dir, array(__CLASS__, '_deleteCallback'), array($dir));
+            if (is_dir($dir)) rmdir($dir);
         }
 
         return true;
@@ -54,10 +54,11 @@ class FileHelper
      */
     public static function createDirectory($directory, $umask=0777)
     {
-        if(is_dir($directory)) return true;
+        if (is_dir($directory)) return true;
 
-        if(!@mkdir($directory, $umask, true))
-            throw new \SpfException("Unable to create $directory");
+        if (!@mkdir($directory, $umask, true)) {
+            throw new FileStoreException("Unable to create $directory");
+        }
 
         return true;
     }
@@ -67,8 +68,12 @@ class FileHelper
      */
     public static function copyDirectory($srcdir, $dstdir, $copyhidden=false)
     {
-        return self::walkDirectory($srcdir,array(__CLASS__,'_copyCallback'),
-            array($srcdir,$dstdir),$copyhidden);
+        return self::walkDirectory(
+            $srcdir,
+            array(__CLASS__, '_copyCallback'),
+            array($srcdir, $dstdir),
+            $copyhidden
+        );
     }
 
     /**
@@ -81,13 +86,13 @@ class FileHelper
         $files = $hidden ? self::globr($dir, '{,.}*', GLOB_BRACE) : self::globr($dir);
 
         // filter out unneeded files
-        $files = array_filter($files,array(__CLASS__,'_filterDotFiles'));
+        $files = array_filter($files, array(__CLASS__, '_filterDotFiles'));
 
         rsort($files);
         $counter = 0;
 
         foreach ($files as $file) {
-            if(call_user_func($callback, $file, $params)) $counter++;
+            if (call_user_func($callback, $file, $params)) $counter++;
         }
 
         return $counter;
@@ -99,7 +104,7 @@ class FileHelper
      */
     private static function _filterHiddenFiles($file)
     {
-        return !preg_match('#(?<=/)(__MACOSX|\..+?)#',$file);
+        return !preg_match('#(?<=/)(__MACOSX|\..+?)#', $file);
     }
 
     /**
@@ -112,14 +117,14 @@ class FileHelper
 
     private static function _copyCallback($filename, $params)
     {
-        $destpath = rtrim($params[1],'/')."/".ltrim(substr($filename, strlen($params[0])),'/');
+        $destpath = rtrim($params[1], '/')."/".ltrim(substr($filename, strlen($params[0])), '/');
 
         if (is_file($filename)) {
             if (!is_dir(dirname($destpath))) {
                 self::createDirectory(dirname($destpath));
             }
 
-            return copy($filename,$destpath);
+            return copy($filename, $destpath);
         } elseif (is_dir($filename)) {
             return self::createDirectory($destpath);
         }
