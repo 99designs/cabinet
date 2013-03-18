@@ -2,7 +2,8 @@
 
 namespace Cabinet;
 
-class FilesystemFileStoreSystemTest extends \Contests_Testing_UnitTestCase
+class FilesystemFileStoreSystemTest
+	extends \PHPUnit_Framework_TestCase
 {
 	function setUp()
 	{
@@ -40,7 +41,7 @@ class FilesystemFileStoreSystemTest extends \Contests_Testing_UnitTestCase
 		$this->assertFalse($this->instance->fileExists('testfile'));
 		$this->instance->setFileContents('testfile','mmmmm plastic');
 		$this->assertTrue($this->instance->fileExists('testfile'));
-		$this->assertEqual('mmmmm plastic',$this->instance->getFileContents('testfile'));
+		$this->assertEquals('mmmmm plastic',$this->instance->getFileContents('testfile'));
 	}
 
 	function testPuttingTwiceWorksOk()
@@ -50,12 +51,12 @@ class FilesystemFileStoreSystemTest extends \Contests_Testing_UnitTestCase
 		$this->instance->setFileContents('testfile','frogs are green');
 		$this->assertTrue($this->instance->fileExists('testfile'));
 
-		$this->assertEqual('frogs are green',$this->instance->getFileContents('testfile'));
+		$this->assertEquals('frogs are green',$this->instance->getFileContents('testfile'));
 	}
 
 	function testGettingANonexistantFileDoesntWork()
 	{
-		$this->expectException();
+		$this->setExpectedException('\Cabinet\FileStoreException');
 		$this->assertTrue($this->instance->getFileContents('testfile'));
 	}
 
@@ -87,7 +88,7 @@ class FilesystemFileStoreSystemTest extends \Contests_Testing_UnitTestCase
 
 		$filestore = new FilesystemFileStore($this->tempdir);
 		$filestore->setFileContents('foo', $fh);
-		$this->assertEqual($filestore->getFileContents('foo'),'a resource in time saves nine');
+		$this->assertEquals($filestore->getFileContents('foo'),'a resource in time saves nine');
 	}
 
 	function testKeysWithSlashesWork()
@@ -95,7 +96,7 @@ class FilesystemFileStoreSystemTest extends \Contests_Testing_UnitTestCase
 		$this->assertFalse($this->instance->fileExists('mydir/testfile'));
 		$this->instance->setFileContents('mydir/testfile','mmmmm plastic');
 		$this->assertTrue($this->instance->fileExists('mydir/testfile'));
-		$this->assertEqual('mmmmm plastic',$this->instance->getFileContents('mydir/testfile'));
+		$this->assertEquals('mmmmm plastic',$this->instance->getFileContents('mydir/testfile'));
 	}
 }
 

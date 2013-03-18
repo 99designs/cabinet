@@ -2,7 +2,8 @@
 
 namespace Cabinet;
 
-class ArrayFileStoreTest extends \Contests_Testing_UnitTestCase
+class ArrayFileStoreTest
+	extends \PHPUnit_Framework_TestCase
 {
 	function setUp()
 	{
@@ -31,7 +32,7 @@ class ArrayFileStoreTest extends \Contests_Testing_UnitTestCase
 		$this->assertFalse($this->instance->fileExists('testfile'));
 		$this->instance->setFileContents('testfile','mmmmm plastic');
 		$this->assertTrue($this->instance->fileExists('testfile'));
-		$this->assertEqual('mmmmm plastic',$this->instance->getFileContents('testfile'));
+		$this->assertEquals('mmmmm plastic',$this->instance->getFileContents('testfile'));
 	}
 
 	function testPuttingTwiceWorksOk()
@@ -41,12 +42,12 @@ class ArrayFileStoreTest extends \Contests_Testing_UnitTestCase
 		$this->instance->setFileContents('testfile','frogs are green');
 		$this->assertTrue($this->instance->fileExists('testfile'));
 
-		$this->assertEqual('frogs are green',$this->instance->getFileContents('testfile'));
+		$this->assertEquals('frogs are green',$this->instance->getFileContents('testfile'));
 	}
 
 	function testGettingANonexistantFileDoesntWork()
 	{
-		$this->expectException();
+		$this->setExpectedException('\Cabinet\FileStoreException');
 		$this->assertTrue($this->instance->getFileContents('testfile'));
 	}
 
@@ -58,7 +59,7 @@ class ArrayFileStoreTest extends \Contests_Testing_UnitTestCase
 
 		$this->instance->deleteFile('testfile');
 
-		$this->expectException();
+		$this->setExpectedException('\Cabinet\FileStoreException');
 		$this->instance->openFile('testfile');
 	}
 
@@ -71,4 +72,3 @@ class ArrayFileStoreTest extends \Contests_Testing_UnitTestCase
 		$this->assertTrue(is_resource($this->instance->openFile('testfile')));
 	}
 }
-

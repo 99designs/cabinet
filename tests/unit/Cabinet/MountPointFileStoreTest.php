@@ -2,19 +2,18 @@
 
 namespace Cabinet;
 
-\Mock::generate('\Cabinet\FileStore','MockFileStore');
-
 /**
  *
  */
-class MountPointFileStoreTest extends \Contests_Testing_UnitTestCase
+class MountPointFileStoreTest
+	extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Creates and registers a mock filestore with the factory
 	 */
 	private function _createMockFileStore($key)
 	{
-		return new \MockFileStore($this);
+		return \Mockery::mock('\Cabinet\MountPointFileStore');
 	}
 
 	public function testRootMount()
@@ -22,8 +21,14 @@ class MountPointFileStoreTest extends \Contests_Testing_UnitTestCase
 		$testfs = $this->_createMockFileStore('testfs');
 		$anotherfs = $this->_createMockFileStore('anotherfs');
 
-		$testfs->expectOnce('setFileContents',array('blargh','meh'));
-		$anotherfs->expectNever('setFileContents');
+		$testfs
+			->shouldReceive('setFileContents')
+			->once()
+			->with('blargh','meh');
+
+		$anotherfs
+			->shouldReceive('setFileContents')
+			->never();
 
 		// test that the / prefix routes to our testfs object
 		$fs = new MountPointFileStore();
@@ -36,26 +41,24 @@ class MountPointFileStoreTest extends \Contests_Testing_UnitTestCase
 	public function testExceptionWhenNoMatchingMount()
 	{
 		$testfs = $this->_createMockFileStore('testfs');
-		$testfs->expectNever('setFileContents');
+		$testfs
+			->shouldReceive('setFileContents')
+			->never();
 
 		$fs = new MountPointFileStore();
 		$fs->mount('/no/match',$testfs);
 
-		try
-		{
-			$fs->setFileContents('/blargh','meh');
-			$this->fail("Expected exception");
-		}
-		catch(FileStoreException $e)
-		{
-			$this->assertTrue(true);
-		}
+		$this->setExpectedException('\Cabinet\FileStoreException');
+		$fs->setFileContents('/blargh','meh');
 	}
 
 	public function testLeadingSlashIsTrimmed()
 	{
 		$testfs = $this->_createMockFileStore('testfs');
-		$testfs->expectOnce('setFileContents',array('meep','meh'));
+		$testfs
+			->shouldReceive('setFileContents')
+			->once()
+			->with('meep','meh');
 
 		// test that the / prefix routes to our testfs object
 		$fs = new MountPointFileStore();
@@ -70,9 +73,16 @@ class MountPointFileStoreTest extends \Contests_Testing_UnitTestCase
 		$anotherfs = $this->_createMockFileStore('anotherfs');
 		$yetanotherfs = $this->_createMockFileStore('anotherfs');
 
-		$testfs->expectOnce('setFileContents',array('meep','meh'));
-		$anotherfs->expectNever('setFileContents');
-		$yetanotherfs->expectNever('setFileContents');
+		$testfs
+			->shouldReceive('setFileContents')
+			->once()
+			->with('meep','meh');
+		$anotherfs
+			->shouldReceive('setFileContents')
+			->never();
+		$yetanotherfs
+			->shouldReceive('setFileContents')
+			->never();
 
 		// test that the / prefix routes to our testfs object
 		$fs = new MountPointFileStore();
@@ -83,4 +93,3 @@ class MountPointFileStoreTest extends \Contests_Testing_UnitTestCase
 		$fs->setFileContents('/my/match/meep','meh');
 	}
 }
-
