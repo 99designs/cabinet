@@ -90,7 +90,7 @@ class FilesystemFileStore extends AbstractFileStore
     /* (non-phpdoc)
      * @see Cabinet\FileStore::getFileContents
      */
-    public function setFileContents($filekey, $data)
+    public function setFileContents($filekey, $data, $options = null)
     {
         $filepath = $this->_getRealFilePath($filekey);
         $tmpfilepath = $filepath.'.tmp-'.uniqid();
