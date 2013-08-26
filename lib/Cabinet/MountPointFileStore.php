@@ -66,7 +66,7 @@ class MountPointFileStore implements FileStore
     public function newFile($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__, array($filekey));
+            __FUNCTION__, func_get_args());
     }
 
     /* (non-phpdoc)
@@ -75,7 +75,7 @@ class MountPointFileStore implements FileStore
     public function getFileMetadata($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__, array($filekey));
+            __FUNCTION__, func_get_args());
     }
 
     /* (non-phpdoc)
@@ -84,7 +84,7 @@ class MountPointFileStore implements FileStore
     public function getFileContents($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__, array($filekey));
+            __FUNCTION__, func_get_args());
     }
 
     /* (non-phpdoc)
@@ -93,7 +93,7 @@ class MountPointFileStore implements FileStore
     public function setFileContents($filekey, $data)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__, array($filekey,$data));
+            __FUNCTION__, func_get_args());
     }
 
     /* (non-phpdoc)
@@ -102,7 +102,7 @@ class MountPointFileStore implements FileStore
     public function deleteFile($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__, array($filekey));
+            __FUNCTION__, func_get_args());
     }
 
     /* (non-phpdoc)
@@ -111,7 +111,7 @@ class MountPointFileStore implements FileStore
     public function openFile($filekey, $readOnly=false)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__, array($filekey, $readOnly));
+            __FUNCTION__, func_get_args());
     }
 
     /* (non-phpdoc)
@@ -120,7 +120,7 @@ class MountPointFileStore implements FileStore
     public function fileExists($filekey)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__, array($filekey));
+            __FUNCTION__, func_get_args());
     }
 
     /* (non-phpdoc)
@@ -129,7 +129,7 @@ class MountPointFileStore implements FileStore
     public function downloadFile($filekey, $filepointer)
     {
         return $this->_invokeMatchingFilestore($filekey,
-            __FUNCTION__, array($filekey));
+            __FUNCTION__, func_get_args());
     }
 
     /* (non-phpdoc)
