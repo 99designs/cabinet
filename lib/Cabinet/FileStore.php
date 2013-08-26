@@ -30,7 +30,7 @@ interface FileStore
      * @return Resource file pointer for the opened file, at the start
      * @throws Cabinet\FileStoreException on error
      */
-    public function openFile($filekey,$readOnly=false);
+    public function openFile($filekey, $readOnly = false);
 
     /**
      * Gets the contents of a file as a string
@@ -46,10 +46,12 @@ interface FileStore
      * exists. Data can be either a string or a stream resource.
      *
      * @param string $filekey the path to the file in the filestore
+     * @param mixed  $data    file data
+     * @param array  $options optional data e.g. content-type
      * @throws Cabinet\FileStoreException If the file cannot be written
      * @return boolean success
      */
-    public function setFileContents($filekey,$data);
+    public function setFileContents($filekey, $data, $options = null);
 
     /**
      * Deletes a file by the key
@@ -81,7 +83,7 @@ interface FileStore
      * Downloads a file into a filepointer
      * @throws Cabinet\FileStoreException If file with that filekey does not exist
      */
-    public function downloadFile($filekey,$filepointer);
+    public function downloadFile($filekey, $filepointer);
 
     /**
      * Closes a file pointer opened with {@link openFile} or {@link newFile}, this
