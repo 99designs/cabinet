@@ -102,7 +102,7 @@ class ReadOnlyFileStore implements FileStore
     /* (non-phpdoc)
      * @see Cabinet\FileStore::getFileContents
     */
-    public function setFileContents($filekey, $data)
+    public function setFileContents($filekey, $data, $options = null)
     {
         return $this->_writer->setFileContents($filekey, $data);
     }

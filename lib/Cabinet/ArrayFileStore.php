@@ -32,7 +32,7 @@ class ArrayFileStore extends AbstractFileStore
     /* (non-php)
      * @see Cabinet\FileStore::setFileContents()
      */
-    public function setFileContents($filekey,$data)
+    public function setFileContents($filekey, $data, $options = null)
     {
         $this->_array[$filekey] = $this->_readStreamOrString($data);
 
